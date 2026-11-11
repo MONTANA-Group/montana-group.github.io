@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Catalog from '../components/Catalog.astro';
+import TermScale from '../components/TermScale.astro';
+import Contacts from '../components/Contacts.astro';
+import { cars } from '../data/cars.js';
+const list = cars.filter((c) => c.programs.includes('rent'));
+const cabrio = cars.find((c) => c.slug === 'mercedes-e300d-cabrio');
+---
+<Base title="Прокат авто в Москве" description="Прокат кабриолета Mercedes-Benz E 300d в Москве от 7 000 ₽ в сутки. Без лимита пробега, возвратный депозит.">
+  <PageHead title="Прокат автомобилей" crumb="Прокат" lead="Машина на день, выходные или месяц. Забираете в парке на Нахимовском проспекте, 24." />
+
+  <section class="section">
+    <div class="wrap pr">
+      <div class="pr__scale"><TermScale scale={cabrio.scale} /></div>
+      <div>
+        <h2>Условия проката</h2>
+        <dl class="tbl">
+          <dt>Возраст</dt><dd>от 20 лет</dd>
+          <dt>Стаж вождения</dt><dd>от 2 лет</dd>
+          <dt>Депозит</dt><dd>30 000 ₽, возвращаем через 1 день после сдачи машины</dd>
+          <dt>Оплата</dt><dd>Наличные или банковская карта</dd>
+          <dt>Страховка</dt><dd>ОСАГО</dd>
+          <dt>Пробег</dt><dd>Без лимита</dd>
+          <dt>Минимальный срок</dt><dd>1 сутки</dd>
+        </dl>
+        <p>Подходит для свидания, предложения руки и сердца, фотосессии, свадебного выезда или поездки с друзьями.</p>
+        <button class="btn btn--taxi" type="button" data-open-lead data-service="rent" data-car={cabrio.slug}>Забронировать кабриолет</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="wrap">
+      <h2>Машины для проката</h2>
+      <Catalog list={list} filters={false} useCity={false} />
+    </div>
+  </section>
+  <Contacts service="rent" />
+</Base>
+
+<style>
+  .pr { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .pr > div { min-width: 0; }
+  .pr__scale { background: var(--white); border-radius: 8px; padding: 24px; }
+  .tbl { display: grid; grid-template-columns: minmax(120px, 40%) 1fr; margin: 0 0 20px; }
+  .tbl dt, .tbl dd { padding: 10px 0; border-bottom: 1px solid var(--line); margin: 0; }
+  .tbl dt { color: var(--asphalt); padding-right: 16px; }
+  @media (max-width: 860px) { .pr { grid-template-columns: 1fr; } }
+</style>

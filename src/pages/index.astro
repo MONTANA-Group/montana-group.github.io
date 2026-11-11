@@ -1,0 +1,161 @@
+---
+import Base from '../layouts/Base.astro';
+import Catalog from '../components/Catalog.astro';
+import TermScale from '../components/TermScale.astro';
+import LeadForm from '../components/LeadForm.astro';
+import Reviews from '../components/Reviews.astro';
+import Contacts from '../components/Contacts.astro';
+import { cars, cities } from '../data/cars.js';
+import { site } from '../data/site.js';
+import { u } from '../lib/url.js';
+const cabrio = cars.find((c) => c.slug === 'mercedes-e300d-cabrio');
+const directions = [
+  { href: '/prokat/', img: 'cars/mercedes-e300d-cabrio/01.jpg', title: 'Прокат', text: 'Кабриолет Mercedes на день, выходные или месяц. Без лимита пробега, депозит возвращаем через день.', link: 'Условия проката' },
+  { href: '/taxi/', img: 'cars/toyota-camry-2021/01.jpg', title: 'Для такси', text: 'Машины в брендировании Яндекса на тарифы «Комфорт», «Комфорт+» и «Бизнес». Можно с выкупом по цене аренды.', link: 'Условия для водителей' },
+  { href: '/vykup/', img: 'cars/bmw-3-diesel-2021/01.jpg', title: 'Выкуп', text: 'BMW, Mercedes и Geely с первым взносом от 10% и сроком от 1 до 5 лет. Не только под такси.', link: 'Программы выкупа' },
+];
+---
+<Base>
+  <section class="hero">
+    <img class="hero__bg" src={u('cars/bmw-520d-business-2020/02.jpg')} alt="" width="1280" height="960" fetchpriority="high" />
+    <div class="wrap hero__in">
+      <div class="hero__text">
+        <h1>Прокат, аренда для такси и выкуп авто в Москве</h1>
+        <p class="hero__lead">Машины выдаём в своём парке на Нахимовском проспекте, 24. Каждый день с 10:00 до 22:00.</p>
+      </div>
+      <form class="pick" data-picker>
+        <fieldset class="pick__progs">
+          <legend>Что нужно</legend>
+          <label><input type="radio" name="prog" value="rent" /><span>Прокат на сутки</span></label>
+          <label><input type="radio" name="prog" value="taxi" /><span>Машина для такси</span></label>
+          <label><input type="radio" name="prog" value="buyout" /><span>Выкуп авто</span></label>
+        </fieldset>
+        <label class="field pick__city">Город
+          <select name="city">
+            {cities.map((c) => <option value={c}>{c}</option>)}
+            <option value="all">Все города</option>
+          </select>
+        </label>
+        <button class="btn btn--taxi" type="submit">Подобрать автомобиль</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="facts">
+    <div class="wrap facts__grid">
+      <p><b>{site.rating} на Авито</b><span>{site.reviewsCount} от клиентов</span></p>
+      <p><b>На Авито с 2010 года</b><span>10 лет сдаём машины в аренду</span></p>
+      <p><b>Нахимовский пр-т, 24</b><span>метро Профсоюзная, 16–20 минут</span></p>
+      <p><b>10:00–22:00</b><span>без выходных и перерыва</span></p>
+    </div>
+  </section>
+
+  <section class="section" id="park">
+    <div class="wrap">
+      <h2>Автопарк</h2>
+      <Catalog initial="all" />
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="wrap">
+      <h2>Три способа взять машину</h2>
+      <div class="dirs">
+        {directions.map((d) => (
+          <a class="dir" href={u(d.href)}>
+            <img src={u(d.img)} alt="" width="640" height="480" loading="lazy" />
+            <h3>{d.title}</h3>
+            <p>{d.text}</p>
+            <span class="dir__link">{d.link}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="wrap feature">
+      <img class="feature__img" src={u('cars/mercedes-e300d-cabrio/01.jpg')} alt="Кабриолет Mercedes-Benz E 300d" width="1280" height="714" loading="lazy" />
+      <div>
+        <h2><span class="slant">Mercedes E 300d</span> кабриолет</h2>
+        <p class="lead">Чем дольше аренда, тем ниже цена за сутки. По будням — 10 000 ₽.</p>
+        <TermScale scale={cabrio.scale} dark />
+        <div class="feature__btns">
+          <button class="btn btn--taxi" type="button" data-open-lead data-service="rent" data-car={cabrio.slug}>Забронировать кабриолет</button>
+          <a class="btn btn--line" href={u(`/cars/${cabrio.slug}/`)}>Подробнее о машине</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Как проходит выкуп</h2>
+      <ol class="steps">
+        <li><h3>Выберите машину и срок</h3><p>От 1 до 5 лет, в зависимости от автомобиля. Чем дольше срок, тем меньше платёж в день.</p></li>
+        <li><h3>Посмотрите машину в парке</h3><p>Договоримся о времени, покажем автомобиль и документы, ответим на вопросы.</p></li>
+        <li><h3>Внесите первый взнос</h3><p>От 100 000 ₽ или 10% стоимости. Подписываем договор и выдаём машину.</p></li>
+        <li><h3>Платите и пользуйтесь</h3><p>После выполнения условий договора автомобиль переходит в вашу собственность. У части машин возможен досрочный выкуп.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <Reviews />
+
+  <Contacts />
+</Base>
+
+<style>
+  .hero { position: relative; color: var(--white); background: var(--graphite); overflow: hidden; }
+  .hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% 60%; }
+  .hero::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(23,24,27,.92) 0%, rgba(23,24,27,.7) 45%, rgba(23,24,27,.15) 100%); }
+  .hero__in { position: relative; z-index: 2; display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: end; padding-top: clamp(56px, 10vw, 128px); padding-bottom: clamp(40px, 6vw, 72px); min-height: min(680px, 82vh); }
+  .hero h1 { max-width: 14ch; }
+  .hero__lead { font-size: 19px; color: #d6d8dc; max-width: 40ch; margin: 0; }
+  .pick { background: var(--white); color: var(--graphite); border-radius: 10px; padding: 24px; display: grid; gap: 16px; }
+  .pick__progs { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .pick__progs legend { font-size: 14px; color: var(--asphalt); margin-bottom: 6px; padding: 0; }
+  .pick__progs label { display: block; cursor: pointer; }
+  .pick__progs input { position: absolute; opacity: 0; }
+  .pick__progs span { display: flex; align-items: center; min-height: 48px; padding: 0 14px; border: 1px solid #b9bcbf; border-radius: 6px; font-weight: 600; }
+  .pick__progs input:checked + span { background: var(--graphite); color: var(--white); border-color: var(--graphite); }
+  .pick__progs input:focus-visible + span { outline: 3px solid var(--taxi); outline-offset: 2px; }
+  @media (max-width: 860px) {
+    .hero__in { grid-template-columns: 1fr; min-height: 0; }
+    .hero::before { background: linear-gradient(180deg, rgba(23,24,27,.55) 0%, rgba(23,24,27,.92) 60%); }
+  }
+
+  .facts { background: var(--white); border-bottom: 1px solid var(--line); }
+  .facts__grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .facts p { margin: 0; padding: 22px 20px 22px 0; display: grid; gap: 2px; }
+  .facts p + p { padding-left: 20px; border-left: 1px solid var(--line); }
+  .facts b { font-family: var(--display); font-weight: 600; font-size: 17px; }
+  .facts span { color: var(--asphalt); font-size: 14px; }
+  @media (max-width: 860px) {
+    .facts__grid { grid-template-columns: 1fr 1fr; }
+    .facts p, .facts p + p { padding: 16px 12px 16px 0; border-left: 0; }
+    .facts p:nth-child(even) { padding-left: 12px; border-left: 1px solid var(--line); }
+    .facts p:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  }
+
+  .dirs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .dir { text-decoration: none; display: flex; flex-direction: column; min-width: 0; }
+  .dir img { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; border-radius: 4px; margin-bottom: 18px; }
+  .dir h3 { font-family: var(--display); font-weight: 800; font-size: 24px; }
+  .dir p { color: var(--asphalt); }
+  .dir__link { margin-top: auto; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--taxi); text-decoration-thickness: 3px; }
+  @media (max-width: 860px) { .dirs { grid-template-columns: 1fr; } }
+
+  .feature { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
+  .feature__img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; }
+  .feature > div { min-width: 0; }
+  .feature__btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  @media (max-width: 860px) { .feature { grid-template-columns: 1fr; } }
+
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; counter-reset: s; }
+  .steps li { counter-increment: s; border-top: 4px solid var(--graphite); padding-top: 18px; }
+  .steps li::before { content: counter(s); font-family: var(--display); font-weight: 800; font-size: 40px; line-height: 1; display: block; margin-bottom: 12px; }
+  .steps p { color: var(--asphalt); font-size: 16px; }
+  @media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+</style>

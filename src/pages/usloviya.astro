@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Contacts from '../components/Contacts.astro';
+import { u } from '../lib/url.js';
+const faq = [
+  ['Нужен ли депозит?', 'Зависит от машины. За кабриолет — 30 000 ₽, возвращаем через день после сдачи. За BMW 520i для такси — 25 000 ₽. У остальных машин для такси депозита нет.'],
+  ['Какой минимальный срок аренды?', 'Прокат — от 1 суток. Kia K5 и BMW 520i для такси — от 30 суток. По остальным машинам уточняйте у менеджера.'],
+  ['Что нужно, чтобы работать в такси на вашей машине?', 'Права категории B, стаж от 3 лет, опыт работы в такси, водительское удостоверение РФ, Киргизии или Беларуси и карточка КИС АРТ.'],
+  ['Как работает выкуп?', 'Вы вносите первый взнос и каждый день платите фиксированную сумму. После выполнения условий договора автомобиль переходит в вашу собственность.'],
+  ['Можно выкупить машину досрочно?', 'У части машин — да, по условиям договора. Например, у Mercedes E 200d в Калуге и BMW 520d в Казани. Для других машин уточняйте у менеджера.'],
+  ['Есть ли лимит пробега?', 'У кабриолета в прокате лимита пробега нет.'],
+  ['Как оплатить?', 'Наличными или банковской картой.'],
+  ['Где забрать машину?', 'В нашем парке: Москва, Нахимовский проспект, 24. Ближайшее метро — Профсоюзная. Машины под выкуп в Калуге, Казани и Туле выдаём в этих городах.'],
+];
+---
+<Base title="Условия и ответы на вопросы" description="Условия проката, аренды для такси и выкупа автомобилей в MONTANA group: депозит, сроки, документы, оплата.">
+  <PageHead title="Условия и частые вопросы" crumb="Условия" lead="Если не нашли ответ, позвоните или напишите в мессенджер — ответим каждый день с 10:00 до 22:00.">
+    <p class="links"><a href={u('/prokat/')}>Условия проката</a> <a href={u('/taxi/')}>Для водителей такси</a> <a href={u('/vykup/')}>Программы выкупа</a></p>
+  </PageHead>
+  <section class="section">
+    <div class="wrap faq">
+      {faq.map(([q, a], i) => (
+        <details open={i === 0}>
+          <summary>{q}</summary>
+          <p>{a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+  <Contacts />
+</Base>
+
+<style>
+  .links { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; }
+  .faq { max-width: 860px; }
+  details { border-bottom: 1px solid var(--line); }
+  summary { cursor: pointer; list-style: none; padding: 20px 40px 20px 0; position: relative; font-family: var(--display); font-weight: 600; font-size: 18px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; position: absolute; right: 4px; top: 14px; font-size: 28px; font-weight: 400; }
+  details[open] summary::after { content: '−'; }
+  details p { margin: 0 0 20px; }
+</style>

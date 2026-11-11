@@ -1,0 +1,55 @@
+---
+import { cars, programNames } from '../data/cars.js';
+import { u } from '../lib/url.js';
+const { id = 'f', service = '', car = '' } = Astro.props;
+---
+<form class="lf" data-demo data-lead-form>
+  <div class="lf__row">
+    <label class="field">Что нужно
+      <select name="service" data-service>
+        <option value="rent" selected={service === 'rent'}>Прокат</option>
+        <option value="taxi" selected={service === 'taxi'}>Машина для такси</option>
+        <option value="buyout" selected={service === 'buyout'}>Выкуп</option>
+      </select>
+    </label>
+    <label class="field">Автомобиль
+      <select name="car" data-car>
+        <option value="">Подберите за меня</option>
+        {cars.map((c) => <option value={c.slug} selected={car === c.slug} data-programs={c.programs.join(' ')}>{c.name}{c.year ? `, ${c.year}` : ''} ({c.city})</option>)}
+      </select>
+    </label>
+  </div>
+  <div class="lf__row" data-dates>
+    <label class="field">Получение
+      <input type="date" name="from" />
+    </label>
+    <label class="field">Возврат
+      <input type="date" name="to" />
+    </label>
+  </div>
+  <div class="lf__row">
+    <label class="field">Имя
+      <input name="name" autocomplete="given-name" required />
+    </label>
+    <label class="field">Телефон
+      <input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+7" required />
+    </label>
+  </div>
+  <label class="lf__agree">
+    <input type="checkbox" name="agree" required />
+    <span>Согласен на обработку персональных данных по <a href={u('/politika/')}>политике</a></span>
+  </label>
+  <button class="btn btn--taxi lf__submit" type="submit">Перезвоните мне</button>
+  <p class="lf__done" role="status" hidden>Это пробная версия сайта, заявка никуда не ушла. В полной версии она придёт менеджеру в Telegram и на почту.</p>
+</form>
+
+<style>
+  .lf { display: grid; gap: 14px; }
+  .lf__row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .lf__row[hidden] { display: none; }
+  .lf__agree { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--asphalt); }
+  .lf__agree input { width: 20px; height: 20px; margin: 2px 0 0; flex: none; accent-color: var(--graphite); }
+  .lf__submit { justify-self: start; }
+  .lf__done { background: #fff6d6; border-left: 4px solid var(--taxi); padding: 12px 14px; margin: 0; font-size: 15px; }
+  @media (max-width: 520px) { .lf__row { grid-template-columns: 1fr; } .lf__submit { justify-self: stretch; } }
+</style>

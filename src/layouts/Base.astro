@@ -1,0 +1,147 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site.js';
+import { cars, cities } from '../data/cars.js';
+import { u } from '../lib/url.js';
+import LeadForm from '../components/LeadForm.astro';
+
+const { title, description = 'Прокат автомобилей, аренда машин для работы в такси и выкуп авто в Москве. MONTANA group, Нахимовский проспект, 24.' } = Astro.props;
+const path = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
+const nav = [
+  ['/avtopark/', 'Автопарк'],
+  ['/prokat/', 'Прокат'],
+  ['/taxi/', 'Для такси'],
+  ['/vykup/', 'Выкуп'],
+  ['/usloviya/', 'Условия'],
+  ['/kontakty/', 'Контакты'],
+];
+---
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title ? `${title} — MONTANA group` : 'MONTANA group — прокат, аренда для такси и выкуп авто в Москве'}</title>
+  <meta name="description" content={description} />
+  <meta name="theme-color" content="#17181b" />
+  <link rel="icon" href={u('brand/favicon.png')} />
+</head>
+<body>
+  <div class="demo-bar">Пробная версия сайта: заявки пока не отправляются, телефон — заглушка.</div>
+  <header class="hdr">
+    <div class="wrap hdr__in">
+      <a class="hdr__logo" href={u('/')} aria-label="MONTANA group, на главную">
+        <img src={u('brand/logo-white.png')} alt="MONTANA group" width="170" height="33" />
+      </a>
+      <label class="hdr__city">
+        <span class="visually-hidden">Город</span>
+        <select id="city-select">
+          {cities.map((c) => <option value={c}>{c}</option>)}
+          <option value="all">Все города</option>
+        </select>
+      </label>
+      <nav class="hdr__nav" id="nav" aria-label="Разделы">
+        {nav.map(([href, label]) => <a href={u(href)} aria-current={path.startsWith(href) ? 'page' : undefined}>{label}</a>)}
+      </nav>
+      <div class="hdr__contact">
+        <a class="hdr__phone" href={site.phoneHref}>{site.phone}</a>
+        <span class="hdr__msg">
+          <a href={site.telegram}>Telegram</a>
+          <a href={site.whatsapp}>WhatsApp</a>
+          <a href={site.max}>MAX</a>
+        </span>
+      </div>
+      <button class="btn btn--taxi hdr__cta" type="button" data-open-lead>Оставить заявку</button>
+      <button class="hdr__burger" type="button" aria-expanded="false" aria-controls="nav" id="burger"><span class="visually-hidden">Меню</span><i></i><i></i><i></i></button>
+    </div>
+  </header>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer class="ftr">
+    <div class="wrap ftr__grid">
+      <div>
+        <img src={u('brand/logo-white.png')} alt="MONTANA group" width="170" height="33" />
+        <p class="ftr__small">Прокат, аренда для такси и выкуп автомобилей.<br />{site.legal}</p>
+      </div>
+      <div>
+        <h3>Разделы</h3>
+        <ul>{nav.map(([href, label]) => <li><a href={u(href)}>{label}</a></li>)}</ul>
+      </div>
+      <div>
+        <h3>Автопарк</h3>
+        <ul>{cars.slice(0, 6).map((c) => <li><a href={u(`/cars/${c.slug}/`)}>{c.name}</a></li>)}</ul>
+      </div>
+      <div>
+        <h3>Контакты</h3>
+        <p><a href={site.phoneHref}>{site.phone}</a><br />{site.address}<br />{site.hours}</p>
+        <p><a href={site.avito}>Мы на Авито</a></p>
+      </div>
+    </div>
+    <div class="wrap ftr__bottom">
+      <a href={u('/politika/')}>Политика обработки персональных данных</a>
+      <span>© {new Date().getFullYear()} MONTANA group</span>
+    </div>
+  </footer>
+
+  <dialog class="leadbox" id="lead-dialog" aria-labelledby="lead-title">
+    <button class="leadbox__close" type="button" data-close-lead aria-label="Закрыть">×</button>
+    <h2 id="lead-title">Заявка на автомобиль</h2>
+    <p class="muted">Менеджер перезвонит с 10:00 до 22:00 и расскажет про наличие и условия.</p>
+    <LeadForm id="dialog" />
+  </dialog>
+
+  <script>
+    import '../scripts/site.js';
+  </script>
+</body>
+</html>
+
+<style is:global>
+  .demo-bar { background: var(--taxi); color: var(--graphite); font-size: 13px; text-align: center; padding: 6px 12px; }
+  .hdr { background: var(--graphite); color: var(--white); position: sticky; top: 0; z-index: 50; }
+  .hdr__in { display: flex; align-items: center; gap: 22px; min-height: 72px; }
+  .hdr__logo img { width: 150px; height: auto; }
+  .hdr__city select { background: transparent; color: var(--white); border: 1px solid #44474d; border-radius: 6px; padding: 8px 10px; font-size: 14px; }
+  .hdr__city option { color: var(--graphite); }
+  .hdr__nav { display: flex; gap: 18px; margin-right: auto; }
+  .hdr__nav a { white-space: nowrap; text-decoration: none; font-size: 15px; color: #d6d8dc; padding: 6px 0; border-bottom: 2px solid transparent; }
+  .hdr__nav a:hover, .hdr__nav a[aria-current] { color: var(--white); border-color: var(--taxi); }
+  .hdr__contact { display: grid; justify-items: end; line-height: 1.3; }
+  .hdr__phone { font-weight: 600; text-decoration: none; white-space: nowrap; }
+  .hdr__msg { display: flex; gap: 10px; font-size: 13px; }
+  .hdr__msg a { color: #a9acb2; }
+  .hdr__burger { display: none; background: none; border: 0; width: 44px; height: 44px; padding: 10px; cursor: pointer; }
+  .hdr__burger i { display: block; height: 2px; background: var(--white); margin: 5px 0; }
+  @media (max-width: 1180px) {
+    .hdr__contact { display: none; }
+  }
+  @media (max-width: 980px) {
+    .hdr__in { gap: 12px; min-height: 64px; flex-wrap: wrap; }
+    .hdr__logo img { width: 124px; }
+    .hdr__burger { display: block; margin-left: auto; }
+    .hdr__cta { display: none; }
+    .hdr__nav { display: none; order: 9; flex-basis: 100%; flex-direction: column; gap: 0; padding: 4px 0 16px; }
+    .hdr__nav.is-open { display: flex; }
+    .hdr__nav a { padding: 12px 0; border-bottom: 1px solid #2f3136; font-size: 17px; }
+  }
+
+  .ftr { background: var(--graphite); color: #c4c7cc; padding: 56px 0 24px; font-size: 15px; }
+  .ftr__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.3fr; gap: 32px; }
+  .ftr h3 { color: var(--white); font-size: 15px; margin-bottom: 12px; }
+  .ftr ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+  .ftr a { color: #c4c7cc; }
+  .ftr a:hover { color: var(--white); }
+  .ftr__small { font-size: 13px; margin-top: 16px; color: #8d9097; }
+  .ftr__bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-top: 1px solid #2f3136; margin-top: 40px; padding-top: 20px; font-size: 13px; color: #8d9097; }
+  @media (max-width: 860px) { .ftr__grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .ftr__grid { grid-template-columns: 1fr; } }
+
+  .leadbox { width: min(560px, calc(100% - 24px)); border: 0; border-radius: 10px; padding: 32px; background: var(--white); color: var(--graphite); }
+  .leadbox::backdrop { background: rgba(23,24,27,.7); }
+  .leadbox h2 { font-size: 26px; padding-right: 32px; }
+  .leadbox__close { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border: 0; background: none; font-size: 30px; cursor: pointer; }
+  @media (max-width: 520px) { .leadbox { padding: 24px 18px; } }
+</style>

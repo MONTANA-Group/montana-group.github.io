@@ -1,0 +1,33 @@
+---
+import CarCard from './CarCard.astro';
+import { cars, programNames } from '../data/cars.js';
+const { list = cars, initial = 'all', filters = true, useCity = true } = Astro.props;
+const tabs = [['all', 'Все'], ...Object.entries(programNames)];
+---
+<div class="cat" data-catalog data-initial={initial} data-use-city={useCity ? '' : undefined}>
+  {filters && (
+    <div class="cat__bar">
+      <div class="cat__tabs" role="group" aria-label="Что нужно">
+        {tabs.map(([k, label]) => <button type="button" class="cat__tab" data-filter={k} aria-pressed={String(k === initial)}>{label}</button>)}
+      </div>
+      {useCity && <p class="cat__city">Город: <b data-city-note>Москва</b>. Сменить можно в шапке сайта.</p>}
+    </div>
+  )}
+  <div class="cat__grid">
+    {list.map((c) => <CarCard car={c} />)}
+  </div>
+  <div class="cat__empty" data-empty hidden>
+    <p>В этом городе таких машин сейчас нет.</p>
+    <button type="button" class="btn btn--dark" data-show-all-cities>Показать все города</button>
+  </div>
+</div>
+
+<style>
+  .cat__bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 24px; margin-bottom: 24px; }
+  .cat__tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cat__tab { min-height: 44px; padding: 0 18px; border-radius: 6px; border: 1px solid #b9bcbf; background: transparent; cursor: pointer; font-weight: 600; }
+  .cat__tab[aria-pressed='true'] { background: var(--graphite); border-color: var(--graphite); color: var(--white); }
+  .cat__city { margin: 0; font-size: 15px; color: var(--asphalt); }
+  .cat__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); gap: 20px; }
+  .cat__empty { padding: 32px 0; }
+</style>

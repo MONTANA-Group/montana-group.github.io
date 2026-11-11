@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Catalog from '../components/Catalog.astro';
+import Contacts from '../components/Contacts.astro';
+import { cars } from '../data/cars.js';
+const list = cars.filter((c) => c.programs.includes('taxi'));
+---
+<Base title="Аренда авто для такси" description="Аренда машин для Яндекс Такси в Москве: Toyota Camry, Kia K5, BMW 5, Mercedes E-класс. Тарифы Комфорт, Комфорт+ и Бизнес, выкуп по цене аренды.">
+  <PageHead title="Машины для работы в такси" crumb="Для такси" lead="Частный таксопарк в Москве. Эконом, «Комфорт+» и «Бизнес», аренда или выкуп по цене аренды. Цены на выкуп от 2 600 до 6 500 ₽ в сутки." />
+
+  <section class="section">
+    <div class="wrap tx">
+      <div>
+        <h2>Что нужно водителю</h2>
+        <ul class="tx__list">
+          <li>Права категории B</li>
+          <li>Стаж вождения от 3 лет</li>
+          <li>Опыт работы в такси</li>
+          <li>Водительское удостоверение РФ, Киргизии или Беларуси</li>
+          <li>Карточка КИС АРТ</li>
+        </ul>
+        <p class="muted">Для отдельных машин возраст от 21 или от 23 лет — указано в карточке.</p>
+      </div>
+      <div>
+        <h2>Что даёт парк</h2>
+        <ul class="tx__list">
+          <li>В первый день аренда или выкуп бесплатно до 24:00</li>
+          <li>Техническая поддержка круглосуточно</li>
+          <li>Подключение к проверенным агрегаторам</li>
+          <li>Техобслуживание машин берёт на себя парк</li>
+          <li>Несколько тарифных планов аренды и выкупа</li>
+        </ul>
+        <button class="btn btn--taxi" type="button" data-open-lead data-service="taxi" data-car="">Подобрать машину под тариф</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="wrap">
+      <h2>Машины для такси</h2>
+      <Catalog list={list} filters={false} useCity={false} />
+    </div>
+  </section>
+  <Contacts service="taxi" />
+</Base>
+
+<style>
+  .tx { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); }
+  .tx__list { list-style: none; padding: 0; margin: 0 0 20px; }
+  .tx__list li { padding: 12px 0 12px 30px; border-bottom: 1px solid var(--line); position: relative; }
+  .tx__list li::before { content: ''; position: absolute; left: 0; top: 19px; width: 14px; height: 10px; background: repeating-linear-gradient(90deg, var(--graphite) 0 5px, var(--taxi) 5px 10px); background-size: 10px 5px; }
+  @media (max-width: 860px) { .tx { grid-template-columns: 1fr; } }
+</style>

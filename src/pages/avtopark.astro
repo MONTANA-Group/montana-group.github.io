@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Catalog from '../components/Catalog.astro';
+import Contacts from '../components/Contacts.astro';
+---
+<Base title="Автопарк" description="Все машины MONTANA group: прокат, аренда для такси и выкуп. Москва, Калуга, Казань, Тула.">
+  <PageHead title="Автопарк" lead="Машины для проката, работы в такси и выкупа. Большая часть парка в Москве, несколько машин под выкуп в Калуге, Казани и Туле." />
+  <section class="section" id="park">
+    <div class="wrap"><Catalog /></div>
+  </section>
+  <Contacts />
+</Base>

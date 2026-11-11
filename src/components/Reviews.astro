@@ -1,0 +1,31 @@
+---
+import { reviews, site } from '../data/site.js';
+---
+<section class="section section--white">
+  <div class="wrap">
+    <div class="rv__head">
+      <h2>Отзывы клиентов</h2>
+      <p class="rv__score"><span class="rv__num">{site.rating}</span> на Авито, {site.reviewsCount}. <a href={site.avito}>Читать все на Авито</a></p>
+    </div>
+    <div class="rv__grid">
+      {reviews.map((r) => (
+        <figure class="rv">
+          <blockquote>{r.text}</blockquote>
+          <figcaption><b>{r.name}</b>, {r.date}<br /><span>{r.car}</span></figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .rv__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 24px; margin-bottom: 28px; }
+  .rv__head h2 { margin: 0; }
+  .rv__score { margin: 0; color: var(--asphalt); }
+  .rv__num { font-family: var(--display); font-weight: 800; font-size: 28px; color: var(--graphite); }
+  .rv__grid { columns: 3 300px; column-gap: 28px; }
+  .rv { break-inside: avoid; margin: 0 0 28px; padding-left: 18px; border-left: 4px solid var(--taxi); }
+  .rv blockquote { margin: 0 0 10px; font-size: 17px; }
+  .rv figcaption { font-size: 14px; color: var(--asphalt); }
+  .rv figcaption b { color: var(--graphite); }
+</style>

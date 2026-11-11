@@ -1,0 +1,50 @@
+---
+// Шкала срока: дорога с отрезками. Нажатие на отрезок меняет цену.
+import { rub } from '../data/cars.js';
+const { scale, dark = false } = Astro.props;
+const first = scale.steps[0];
+---
+<div class:list={['ts', { 'ts--dark': dark }]} data-scale>
+  <p class="ts__title">{scale.title}</p>
+  <p class="ts__price"><span class="price" data-scale-price>{rub(first.price)}</span> <span class="ts__unit">в {scale.unit === 'день' ? 'день' : 'сутки'}</span></p>
+  <p class="ts__sub"><span data-scale-month>{first.month ? `${rub(first.month)} в месяц` : ''}</span> <span data-scale-note>{first.note || ''}</span></p>
+  <div class="ts__scroll">
+    <div class="ts__road" role="radiogroup" aria-label={scale.title} style={`--n:${scale.steps.length}`}>
+      {scale.steps.map((s, i) => (
+        <button type="button" role="radio" class="ts__step" aria-checked={String(i === 0)} tabindex={i === 0 ? 0 : -1}
+          data-step data-price={s.price} data-month={s.month} data-note={s.note}>
+          <span class="ts__lane"></span>
+          <span class="ts__label">{s.label}</span>
+          <span class="ts__mini">{rub(s.price)}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .ts { --bg: var(--white); }
+  .ts__title { font-weight: 600; margin: 0 0 4px; }
+  .ts__price { margin: 0; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .ts__price .price { font-size: clamp(34px, 5vw, 52px); line-height: 1.1; }
+  .ts__unit { color: var(--asphalt); }
+  .ts__sub { min-height: 1.6em; margin: 4px 0 18px; color: var(--asphalt); font-size: 15px; }
+  .ts__scroll { overflow-x: auto; padding-bottom: 6px; }
+  .ts__road { display: grid; grid-template-columns: repeat(var(--n), minmax(66px, 1fr)); min-width: calc(var(--n) * 66px); }
+  .ts__step { position: relative; display: grid; gap: 8px; padding: 0 0 4px; border: 0; background: none; cursor: pointer; text-align: left; }
+  /* полотно дороги с разметкой */
+  .ts__lane { display: block; height: 22px; background: var(--graphite); position: relative; border-right: 2px solid var(--concrete); }
+  .ts__step:last-child .ts__lane { border-right: 0; }
+  .ts__lane::after { content: ''; position: absolute; left: 8px; right: 8px; top: 10px; height: 2px; background: repeating-linear-gradient(90deg, #8a8d93 0 10px, transparent 10px 18px); }
+  .ts__step[aria-checked='true'] .ts__lane { background: var(--taxi); }
+  .ts__step[aria-checked='true'] .ts__lane::after { background: repeating-linear-gradient(90deg, var(--graphite) 0 10px, transparent 10px 18px); }
+  .ts__step:hover:not([aria-checked='true']) .ts__lane { background: #3a3c42; }
+  .ts__label { font-weight: 600; font-size: 15px; padding-right: 6px; }
+  @media (max-width: 520px) { .ts__label { font-size: 13px; } .ts__mini { font-size: 12px !important; } }
+  .ts__mini { font-size: 13px; color: var(--asphalt); white-space: nowrap; }
+  .ts__step[aria-checked='true'] .ts__mini { color: var(--graphite); }
+  .ts--dark .ts__unit, .ts--dark .ts__sub, .ts--dark .ts__mini { color: #b9bcc2; }
+  .ts--dark .ts__step, .ts--dark .ts__step[aria-checked='true'] .ts__mini { color: var(--white); }
+  .ts--dark .ts__lane { background: #3a3c42; border-color: var(--graphite); }
+  .ts--dark .ts__step[aria-checked='true'] .ts__lane { background: var(--taxi); }
+</style>

@@ -1,0 +1,38 @@
+---
+import LeadForm from './LeadForm.astro';
+import { site } from '../data/site.js';
+const { service = '' } = Astro.props;
+---
+<section class="section" id="contacts">
+  <div class="wrap ct">
+    <div>
+      <h2>Приезжайте в парк или оставьте заявку</h2>
+      <dl class="ct__list">
+        <dt>Адрес</dt><dd>{site.address}<br /><a href={site.mapLink}>Открыть в Яндекс Картах</a></dd>
+        <dt>Метро</dt><dd>{site.metro.map(([m, t]) => <span class="ct__metro">{m}, {t}</span>)}</dd>
+        <dt>Часы работы</dt><dd>{site.hours}, без перерыва</dd>
+        <dt>Телефон</dt><dd><a href={site.phoneHref}>{site.phone}</a></dd>
+        <dt>Написать</dt><dd class="ct__msg"><a href={site.telegram}>Telegram</a> <a href={site.whatsapp}>WhatsApp</a> <a href={site.max}>MAX</a> <a href={site.avito}>Авито</a></dd>
+      </dl>
+    </div>
+    <div class="ct__form">
+      <h3>Заявка на автомобиль</h3>
+      <p class="muted">Перезвоним в рабочее время, расскажем про наличие и условия.</p>
+      <LeadForm id="contacts" service={service} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .ct { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); }
+  .ct > div { min-width: 0; }
+  .ct__list { display: grid; grid-template-columns: max-content 1fr; gap: 12px 24px; margin: 24px 0 0; }
+  .ct__list dt { color: var(--asphalt); }
+  .ct__list dd { margin: 0; }
+  .ct__metro { display: block; }
+  .ct__msg { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+  .ct__form { background: var(--white); border-radius: 10px; padding: clamp(20px, 3vw, 32px); }
+  .ct__form h3 { font-family: var(--display); font-size: 22px; }
+  @media (max-width: 860px) { .ct { grid-template-columns: 1fr; } }
+  @media (max-width: 420px) { .ct__list { grid-template-columns: 1fr; gap: 2px; } .ct__list dd { margin-bottom: 12px; } }
+</style>

@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import Catalog from '../components/Catalog.astro';
+import TermScale from '../components/TermScale.astro';
+import Contacts from '../components/Contacts.astro';
+import { cars } from '../data/cars.js';
+import { u } from '../lib/url.js';
+const list = cars.filter((c) => c.programs.includes('buyout'));
+const kaluga = cars.find((c) => c.slug === 'mercedes-e-class-kaluga');
+---
+<Base title="Выкуп авто" description="Аренда с выкупом BMW, Mercedes-Benz, Toyota, Kia и Geely. Первый взнос от 10%, срок от 1 до 5 лет. Москва, Калуга, Казань, Тула.">
+  <PageHead title="Автомобиль с выкупом" crumb="Выкуп" lead="Не нужно платить всю стоимость сразу. Вносите первый взнос, пользуетесь машиной и платите каждый день. После выполнения договора машина ваша." />
+
+  <section class="section">
+    <div class="wrap vk">
+      <div>
+        <h2>Две программы</h2>
+        <h3>Под такси</h3>
+        <p>Первый взнос 100 000 ₽, выкуп за 3 года по цене аренды: от 3 300 ₽ в сутки. Toyota Camry, Kia K5, BMW 520d, Mercedes E-класс.</p>
+        <h3>Для себя</h3>
+        <p>Первый взнос около 10% стоимости, срок от 1 до 5 лет. У Mercedes в Калуге и BMW в Казани возможен досрочный выкуп по договору.</p>
+        <p class="muted">Все суммы предварительные. Итоговые условия, график и полная сумма выплат прописываются в договоре.</p>
+      </div>
+      <div class="vk__scale">
+        <p class="vk__car"><a href={u(`/cars/${kaluga.slug}/`)}><span class="slant">{kaluga.name}</span></a>, {kaluga.year}, Калуга. Стоимость 2 400 000 ₽, взнос 240 000 ₽.</p>
+        <TermScale scale={kaluga.scale} />
+        <button class="btn btn--taxi vk__btn" type="button" data-open-lead data-service="buyout" data-car="">Получить расчёт выкупа</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="wrap">
+      <h2>Машины под выкуп</h2>
+      <Catalog list={list} filters={false} useCity={false} />
+    </div>
+  </section>
+  <Contacts service="buyout" />
+</Base>
+
+<style>
+  .vk { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 64px); align-items: start; }
+  .vk > div { min-width: 0; }
+  .vk h3 { margin-top: 18px; }
+  .vk__scale { background: var(--white); border-radius: 8px; padding: 24px; }
+  .vk__car { font-size: 15px; color: var(--asphalt); }
+  .vk__car a { color: var(--graphite); font-size: 18px; text-decoration: none; }
+  .vk__btn { margin-top: 20px; }
+  @media (max-width: 860px) { .vk { grid-template-columns: 1fr; } }
+</style>
