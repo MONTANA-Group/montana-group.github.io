@@ -1,8 +1,8 @@
 // Контакты и данные компании. Телефон, мессенджеры и юрлицо — заглушки, заменить перед запуском.
 export const site = {
   name: 'MONTANA group',
-  phone: '+7 (000) 000-00-00',
-  phoneHref: 'tel:+70000000000',
+  phone: '+7 (777) 777-77-77',
+  phoneHref: 'tel:+77777777777',
   telegram: 'https://t.me/',
   whatsapp: 'https://wa.me/',
   max: 'https://max.ru/',
