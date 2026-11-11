@@ -20,12 +20,12 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - id: pages
+        uses: actions/configure-pages@v5
       - name: Build
+        # Адрес сайта берётся из настроек Pages, поэтому переименование репозитория ничего не ломает
         run: |
-          REPO="${{ github.event.repository.name }}"
-          OWNER="${{ github.repository_owner }}"
-          # Без хвоста открывается только репозиторий <владелец>.github.io, остальные — по адресу /<имя-репозитория>/
-          if [[ "${REPO,,}" == "${OWNER,,}.github.io" ]]; then export BASE_PATH="/"; else export BASE_PATH="/$REPO/"; fi
+          export BASE_PATH="${{ steps.pages.outputs.base_path }}/"
           echo "BASE_PATH=$BASE_PATH"
           npm run build
       - uses: actions/upload-pages-artifact@v3
